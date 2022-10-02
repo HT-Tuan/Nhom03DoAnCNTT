@@ -15,10 +15,7 @@ public:
     // constructor
     Node(T data)
     {
-        this->data = data;
-        this->left = NULL;
-        this->right = NULL;
-        this->parent = NULL;
+        Creat_Node(data);
     }
     //
     void Creat_Node(T data)
@@ -170,6 +167,5 @@ int main()
     // Tree2.InsertTree(12.8);
     // Tree2.DuyetGiua();
     // cout<<endl;
-
     return 0;
 }
