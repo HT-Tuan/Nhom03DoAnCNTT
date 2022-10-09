@@ -50,11 +50,20 @@ template <typename T>
 class Queue
 {
 public:
+    // Thuoc tinh
+    Node_list<T> *Front;
+    Node_list<T> *Rear;
+    // constructor
     Queue()
     {
         Create_Queue();
     }
     // Phuong thuc
+    void Create_Queue()
+    {
+        this->Front = NULL;
+        this->Rear = NULL;
+    }
     // Enqueue
     int PushQ(Node<T> value)
     {
@@ -96,23 +105,13 @@ public:
         }
         return 0;
     }
-
-private:
-    // Thuoc tinh
-    Node_list<T> *Front;
-    Node_list<T> *Rear;
-    // constructor
-    void Create_Queue()
-    {
-        this->Front = NULL;
-        this->Rear = NULL;
-    }
 };
 //
 template <typename T>
 class Stack
 {
 public:
+    Node_list<T> *sp;
     Stack()
     {
         Create_Stack();
@@ -150,9 +149,6 @@ public:
         }
         return 0;
     }
-
-private:
-    Node_list<T> *sp;
 };
 //
 // Lop Cay binary search tree (BST)
@@ -168,7 +164,7 @@ public:
     // destructor
     ~BST()
     {
-        printf("Da Huy tree");
+        cout << "Da Huy tree" << endl;
     }
     void InsertTree(T value)
     {
@@ -182,9 +178,18 @@ public:
     {
         INORDER_TREE_WALK(this->Root);
     }
+    //
     void DuyetSau()
     {
         POSTORDER_TREE_WALK(this->Root);
+    }
+    void DuyetRongTruoc()
+    {
+        BFS(this->Root);
+    }
+    void DuyetSauTruoc()
+    {
+        DFS(this->Root);
     }
 
 private:
@@ -229,8 +234,8 @@ private:
         if (R != NULL)
         {
             cout << R->data << endl;
-            INORDER_TREE_WALK(R->left);
-            INORDER_TREE_WALK(R->right);
+            PREORDER_TREE_WALK(R->left);
+            PREORDER_TREE_WALK(R->right);
         }
     }
     // Duyet Giua
@@ -248,26 +253,67 @@ private:
     {
         if (R != NULL)
         {
-            INORDER_TREE_WALK(R->left);
-            INORDER_TREE_WALK(R->right);
+            POSTORDER_TREE_WALK(R->left);
+            POSTORDER_TREE_WALK(R->right);
             cout << R->data << endl;
         }
     }
+    // Thuat toan duyet rong truoc BFS
+    void BFS(Node<T> *Root)
+    {
+        Queue<T> HangDoi;
+        Node<T> temp;
+        HangDoi.PushQ(*Root);
+        while (HangDoi.Front != NULL)
+        {
+            HangDoi.PopQ(&temp);
+            cout << temp.data << endl;
+            if (temp.left != NULL)
+            {
+                HangDoi.PushQ(*(temp.left));
+            }
+            if (temp.right != NULL)
+            {
+                HangDoi.PushQ(*(temp.right));
+            }
+        }
+    }
+    // Thuat toan duyet sau truoc DFS
+    void DFS(Node<T> *Root)
+    {
+        Stack<T> NganXep;
+        Node<T> temp;
+        NganXep.PushS(*Root);
+        while (NganXep.sp != NULL)
+        {
+            NganXep.PopS(&temp);
+            cout << temp.data << endl;
+            if (temp.right != NULL)
+            {
+                NganXep.PushS(*(temp.right));
+            }
+            if (temp.left != NULL)
+            {
+                NganXep.PushS(*(temp.left));
+            }
+        }
+    }
 };
-
 int main()
 {
-    // BST<int> Tree;
-    // Tree.InsertTree(12);
-    // Tree.InsertTree(18);
-    // Tree.InsertTree(5);
-    // Tree.InsertTree(2);
-    // Tree.InsertTree(9);
-    // Tree.InsertTree(15);
-    // Tree.InsertTree(19);
-    // Tree.InsertTree(17);
-    // Tree.DuyetGiua();
-    // cout << endl;
+    BST<int> Tree;
+    Tree.InsertTree(12);
+    Tree.InsertTree(18);
+    Tree.InsertTree(5);
+    Tree.InsertTree(2);
+    Tree.InsertTree(9);
+    Tree.InsertTree(15);
+    Tree.InsertTree(19);
+    Tree.InsertTree(17);
+    cout << endl;
+    Tree.DuyetRongTruoc();
+    cout << endl;
+    Tree.DuyetSauTruoc();
     // Tree.DuyetGiua();
     // cout<<endl;
     // //
@@ -315,6 +361,6 @@ int main()
     // q1.PopQ(&temp);
     // cout << "Queue:" << temp.data << endl;
     //==================
-    
+
     return 0;
 }
