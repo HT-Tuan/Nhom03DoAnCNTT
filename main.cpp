@@ -192,11 +192,119 @@ public:
         DFS(this->Root);
     }
 
+    void TimPreorder(int N)
+    {
+        Node<T> *temp;
+        int index;
+        temp = NULL;
+        index = 1;
+        NthPreordernode(this->Root, N, temp, index);
+
+        if (temp != NULL)
+            cout << temp->data << endl;
+        else
+            cout << "co loi error" << endl;
+    }
+
+    void Xoa(int N)
+    {
+        Node<T> *temp;
+        int index;
+        temp = NULL;
+        index = 1;
+        NthPreordernode(this->Root, N, temp, index);
+        if (temp != NULL)
+            TREE_DELETE(this->Root, temp);
+        else
+            cout << "co loi error" << endl;
+    }
+
 private:
     // Thuoc tinh
     Node<T> *Root;
     //
     // Phuong Thuc
+
+    struct node *minValueNode(Node<T> *node)
+    {
+        struct node *current = node;
+
+        while (current && current->left != NULL)
+            current = current->left;
+
+        return current;
+    }
+
+    Node<T> *TREE_MINIMUM(Node<T> *temp)
+    {
+        while (temp->left != NULL)
+        {
+            temp = temp->left;
+        }
+        return temp;
+    }
+
+    Node<T> *TREE_SUCCESSOR(Node<T> *temp)
+    {
+        if (temp->right != NULL)
+            return TREE_MINIMUM(temp->right);
+        Node<T> *y;
+        y = temp->parent;
+        while ((y != NULL) && (temp == y->right))
+        {
+            temp = y;
+            y = y->parent;
+        }
+        return y;
+    }
+
+    Node<T> *TREE_DELETE(Node<T> *&root, Node<T> *z)
+    {
+        Node<T> *x, *y;
+        if ((z->left == NULL) || (z->right == NULL))
+            y = z;
+        else
+            y = TREE_SUCCESSOR(z);
+
+        if (y->left != NULL)
+            x = y->left;
+        else
+            x = y->right;
+
+        if (x != NULL)
+            x->parent = y->parent;
+
+        if (y->parent == NULL)
+            root = x;
+        else
+        {
+            if (y == ((y->parent)->left))
+                (y->parent)->left = x;
+            else
+                (y->parent)->right = x;
+        }
+        if (y != z)
+        {
+            z->data = y->data;
+        }
+
+        return y;
+    }
+
+    void NthPreordernode(Node<T> *R, int N, Node<T> *&temp, int &flag)
+    {
+        if (R != NULL)
+        {
+            if (flag == N)
+            {
+                temp = R;
+            }
+            flag = flag + 1;
+            NthPreordernode(R->left, N, temp, flag);
+            NthPreordernode(R->right, N, temp, flag);
+        }
+    }
+
     void TREE_INSERT(Node<T> *&Root, T value)
     {
         Node<T> *x, *y, *z;
@@ -310,11 +418,11 @@ int main()
     Tree.InsertTree(15);
     Tree.InsertTree(19);
     Tree.InsertTree(17);
-    cout << endl;
-    Tree.DuyetRongTruoc();
-    cout << endl;
-    Tree.DuyetSauTruoc();
-    // Tree.DuyetGiua();
+    // cout << endl;
+    // Tree.DuyetRongTruoc();
+    // cout << endl;
+    // Tree.DuyetSauTruoc();
+    Tree.DuyetTruoc();
     // cout<<endl;
     // //
     // //
@@ -361,6 +469,19 @@ int main()
     // q1.PopQ(&temp);
     // cout << "Queue:" << temp.data << endl;
     //==================
+    int N = 6;
+
+    // tim gia tri n, duyet truoc
+    cout << endl;
+    Tree.TimPreorder(N);
+    Tree.TimPreorder(4);
+    Tree.Xoa(N);
+    cout << endl;
+    Tree.DuyetTruoc();
+
+    // xoa gia tri n, duyet giua
+    //  Tree = Xoa (Tree, 17);
+    //  Tree.DuyetGiua();
 
     return 0;
 }
