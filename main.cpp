@@ -1,17 +1,20 @@
-  
+
 //   * * * * * * * * * * * * * * * * * * * * * * * * * *
 //   *  De tai: Do An 3 - Cay Nhi Phan Tim Kiem (BST)  *
 //   *  Thuc hien:                                     *
 //   *            1. Huynh Thanh Tuan - 20110120       *
 //   *            2. Tran Nguyen Duy Linh - 20110516   *
 //   * * * * * * * * * * * * * * * * * * * * * * * * * *
-//   * * * * * * * * * * * * * * * * * * * * * * * * * * 
+//   * * * * * * * * * * * * * * * * * * * * * * * * * *
+
 // Khai bao thu vien
 #include <iostream>
+#include <stdio.h>
 #include <conio.h>
 #include <malloc.h>
 #include <string.h>
 using namespace std;
+//
 // Xay dung lop TuNgu
 class TuNgu
 {
@@ -29,14 +32,20 @@ public:
     // Phuong thuc
     void Create_TuNgu()
     {
-        this->TiengAnh[0] = '\0';
-        this->TiengViet[0] = '\0';
-        this->Tuloai[0] = '\0';
-        this->Vidu[0] = '\0';
+        for (int i = 0; i < 21; i++)
+        {
+            this->TiengAnh[i] = '\0';
+            this->TiengViet[i] = '\0';
+            this->Tuloai[i] = '\0';
+            this->Vidu[i] = '\0';
+        }
     }
     bool operator<(TuNgu B)
     {
-        if (strcmp(this->TiengAnh, B.TiengAnh) < 0)
+        char a[21], b[21];
+        ChuyenChuThuong(this->TiengAnh, a);
+        ChuyenChuThuong(B.TiengAnh, b);
+        if (strcmp(a, b) < 0)
         {
             return true;
         }
@@ -44,7 +53,10 @@ public:
     }
     bool operator!=(TuNgu B)
     {
-        if (strcmp(this->TiengAnh, B.TiengAnh) != 0)
+        char a[21], b[21];
+        ChuyenChuThuong(this->TiengAnh, a);
+        ChuyenChuThuong(B.TiengAnh, b);
+        if (strcmp(a, b) != 0)
         {
             return true;
         }
@@ -52,8 +64,60 @@ public:
     }
     friend ostream &operator<<(ostream &os, TuNgu data)
     {
-        os << "Tu tieng anh: " << data.TiengAnh << "\nTu nghia tieng viet: " << data.TiengViet << "\nTu loai: " << data.Tuloai << "\nVi du: " << data.Vidu;
+        int i;
+        os << "Tu tieng anh:";
+        for (i = 0; i < strlen(data.TiengAnh); i++)
+        {
+            if (data.TiengAnh[i] >= 'A' && data.TiengAnh[i] <= 'Z')
+            {
+                os << " ";
+            }
+            os << data.TiengAnh[i];
+        }
+        os << "\nNghia tieng viet:";
+        for (i = 0; i < strlen(data.TiengViet); i++)
+        {
+            if (data.TiengViet[i] >= 'A' && data.TiengViet[i] <= 'Z')
+            {
+                os << " ";
+            }
+            os << data.TiengViet[i];
+        }
+        os << "\nTu loai:";
+        for (i = 0; i < strlen(data.Tuloai); i++)
+        {
+            if (data.Tuloai[i] >= 'A' && data.Tuloai[i] <= 'Z')
+            {
+                os << " ";
+            }
+            os << data.Tuloai[i];
+        }
+        os << "\nVi du:";
+        for (i = 0; i < strlen(data.Vidu); i++)
+        {
+            if (data.Vidu[i] >= 'A' && data.Vidu[i] <= 'Z')
+            {
+                os << " ";
+            }
+            os << data.Vidu[i];
+        }
         return os;
+    }
+    void ChuyenChuThuong(char A[], char kq[])
+    {
+        int i;
+        for (i = 0; i < strlen(A); i++)
+        {
+            if (A[i] >= 'A' && A[i] <= 'Z')
+            {
+                kq[i] = A[i] + 32;
+            }
+            else
+            {
+                kq[i] = A[i];
+            }
+        }
+        kq[i] = '\0';
     }
 };
 // dac ta Node cho cay BST
@@ -230,6 +294,11 @@ public:
     {
         DESTROY_TREE(this->Root);
         this->Root = NULL;
+    }
+    //
+    Node<T> *GetRoot()
+    {
+        return this->Root;
     }
     //
     int InsertTree(T value)
@@ -433,6 +502,10 @@ public:
     //
     void IN_THEO_CHAR(char key)
     {
+        if (key >= 'A' && key <= 'Z')
+        {
+            key = key + 32;
+        }
         return TREE_SEARCH_CHAR(this->Root, key);
     }
 
@@ -457,7 +530,6 @@ private:
     int TREE_INSERT(Node<T> *&Root, T value)
     {
         Node<T> *x, *y, *z;
-        // z = new Node<T>(value);
         z = (Node<T> *)malloc(sizeof(Node<T>));
         if (z == NULL)
         {
@@ -715,9 +787,35 @@ private:
         if (root != NULL)
         {
             TREE_SEARCH_CHAR(root->left, k);
-            if (root->data.TiengAnh[0] == k)
+            if (root->data.TiengAnh[0] >= 'A' && root->data.TiengAnh[0] <= 'Z')
             {
-                cout << root->data.TiengAnh << endl;
+                if ((root->data.TiengAnh[0]) + 32 == k)
+                {
+                    for (int i = 0; i < strlen(root->data.TiengAnh); i++)
+                    {
+                        if (root->data.TiengAnh[i] >= 'A' && root->data.TiengAnh[i] <= 'Z')
+                        {
+                            cout << " ";
+                        }
+                        cout << root->data.TiengAnh[i];
+                    }
+                    cout << endl;
+                }
+            }
+            else
+            {
+                if (root->data.TiengAnh[0] == k)
+                {
+                    for (int i = 0; i < strlen(root->data.TiengAnh); i++)
+                    {
+                        if (root->data.TiengAnh[i] >= 'A' && root->data.TiengAnh[i] <= 'Z')
+                        {
+                            cout << " ";
+                        }
+                        cout << root->data.TiengAnh[i];
+                    }
+                    cout << endl;
+                }
             }
             TREE_SEARCH_CHAR(root->right, k);
         }
@@ -767,6 +865,10 @@ private:
         int i;
         do
         {
+            for (int t = 0; t < slg; t++)
+            {
+                A[t] = '\0';
+            }
             cout << "Nhap: ";
             i = 0;
             temp = cin.get();
@@ -774,30 +876,15 @@ private:
             {
                 temp = cin.get();
             }
-            while (((temp >= 'A' && temp <= 'Z') || (temp >= 'a' && temp <= 'z')) && i < slg)
+            while (((temp >= 'A' && temp <= 'Z') || (temp >= 'a' && temp <= 'z')) && i < slg - 1)
             {
-                if (temp >= 'A' && temp <= 'Z')
-                {
-                    temp = temp + 32;
-                }
                 A[i] = temp;
                 i = i + 1;
                 temp = cin.get();
             }
-            if (i != 0 && (temp == '\n' || ((temp == ' ' || temp == '\t') && Xoa_Vung_Nho_Tam() == 0)))
+            if (temp != '\n' && (Xoa_Vung_Nho_Tam() == 1 || (temp != ' ' && temp != '\t')))
             {
-                A[i] = '\0';
-            }
-            else
-            {
-                if (temp != ' ' && temp != '\t')
-                {
-                    Xoa_Vung_Nho_Tam();
-                }
-                if (slg != 1)
-                    cout << "Co loi. Chi nhap ky tu chu, toi da la 20 ky tu va khong co khoang cach giua cac tu  !!!" << endl;
-                else
-                    cout << "Co loi. Chi nhap ky tu chu, toi da la 1 ky tu !!!" << endl;
+                cout << "Co loi. Chi nhap ky tu chu, toi da la " << slg - 1 << " ky tu va khong co khoang cach giua cac tu  !!!" << endl;
                 cout << "Thuc hien lai" << endl;
                 continue;
             }
@@ -928,6 +1015,73 @@ private:
                 return 0;
         } while (1);
     }
+    //
+    //
+    void Ghi_txt(Node<TuNgu> *T, FILE *f)
+    {
+        static char temp = '\n';
+        if (T != NULL)
+        {
+            fwrite(T->data.TiengAnh, sizeof(T->data.TiengAnh), 1, f);
+            fwrite(&temp, sizeof(temp), 1, f);
+            fwrite(T->data.TiengViet, sizeof(T->data.TiengViet), 1, f);
+            fwrite(&temp, sizeof(temp), 1, f);
+            fwrite(T->data.Tuloai, sizeof(T->data.Tuloai), 1, f);
+            fwrite(&temp, sizeof(temp), 1, f);
+            fwrite(T->data.Vidu, sizeof(T->data.Vidu), 1, f);
+            fwrite(&temp, sizeof(temp), 1, f);
+            Ghi_txt(T->left, f);
+            Ghi_txt(T->right, f);
+        }
+    }
+    void Ghifile_txt(Node<TuNgu> *T)
+    {
+        FILE *f;
+        f = fopen("./data.txt", "wt");
+        if (f == NULL)
+        {
+            cout << "File data.txt khong mo duoc de ghi!!!" << endl;
+            return;
+        }
+        Ghi_txt(T, f);
+        fclose(f);
+        cout << "Da luu tu dien xong..." << endl;
+    }
+    //
+    void Docfile_txt(BST<TuNgu> &TREE)
+    {
+        FILE *f;
+        TuNgu mau;
+        char temp;
+        f = fopen("./data.txt", "rt");
+        if (f == NULL)
+        {
+            cout << "File data.txt khong mo duoc de tao du lieu cho tu dien !!!" << endl;
+            cout << "Vui long tao tu vung bang cach thu cong !!!" << endl;
+            return;
+        }
+        cout << "Dang tao du lieu cho tu dien ..." << endl;
+        while (fread(mau.TiengAnh, sizeof(mau.TiengAnh), 1, f) != 0)
+        {
+            fread(&temp, sizeof(temp), 1, f);
+            fread(mau.TiengViet, sizeof(mau.TiengViet), 1, f);
+            fread(&temp, sizeof(temp), 1, f);
+            fread(mau.Tuloai, sizeof(mau.Tuloai), 1, f);
+            fread(&temp, sizeof(temp), 1, f);
+            fread(mau.Vidu, sizeof(mau.Vidu), 1, f);
+            fread(&temp, sizeof(temp), 1, f);
+            if (TREE.InsertTree(mau) == 0)
+            {
+                cout << "Qua trinh tao du lieu bi loi!!!" << endl;
+                cout << "Vui long tao tu vung bang cach thu cong !!!" << endl;
+                fclose(f);
+                return;
+            }
+        }
+        cout << "Da tao du lieu hoan tat" << endl;
+        fclose(f);
+    }
+    //
 
     char Lua_Chon_Duyet()
     {
@@ -966,7 +1120,6 @@ private:
             cout << "*   3. Nhap 0 de thoat chuong trinh.                            *\n";
             cout << "* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *\n";
             cout << "Nhap vao 1 so nguyen tu 0 den 2 va nhan enter: ";
-            // goi ham nhap char
             do
             {
                 Nhap_char_so(temp);
@@ -1075,6 +1228,7 @@ private:
             switch (temp)
             {
             case '1':
+                cout << "--------------" << endl;
                 cout << "  Luu y: lua chon nay se xoa cay hien tai" << endl;
                 cout << "Nhan phim esc de huy hoac enter de tiep tuc: " << endl;
                 while (1)
@@ -1119,6 +1273,7 @@ private:
                     case '1':
                         if (kq == 1)
                         {
+                            cout << "Ket qua: ";
                             if (Tree1.Timkey(val1) == NULL && Tree1.InsertTree(val1) == 1)
                                 cout << "Da them thanh cong" << endl;
                             else
@@ -1772,14 +1927,15 @@ private:
     }
     void GiaoDienSoHai()
     {
-        char temp;
+        char temp, Kytu[2];
         int kq, Tong;
         BST<TuNgu> Tree_TN;
         TuNgu vocal;
         Node<TuNgu> *poin_TN;
+        // Tao data cho tu dien
+        Docfile_txt(Tree_TN);
         do
         {
-            // taotudien
             Tong = 0;
             Tree_TN.Slg_Node(Tong);
             system("cls");
@@ -1792,8 +1948,7 @@ private:
             cout << "*   3. Nhap 3 de them tu vung.                                  *\n";
             cout << "*   4. Nhap 4 de xoa tu vung.                                   *\n";
             cout << "*   5. Nhap 5 de chinh sua tu vung.                             *\n";
-            cout << "*   6. Nhap 6 de tao file txt tu dien.                          *\n";
-            cout << "*   7. Nhap 0 de thoat chuong trinh.                            *\n";
+            cout << "*   6. Nhap 0 de quay lai menu chinh                            *\n";
             cout << "*                                                               *\n";
             cout << "*   So tu vung: ";
             cout.width(47);
@@ -1808,7 +1963,7 @@ private:
                 if (temp < '0' || temp > '5')
                 {
                     cout << "Nhap lai !!!" << endl;
-                    cout << "Nhap vao 1 so nguyen tu 0 den 6 va nhan enter: ";
+                    cout << "Nhap vao 1 so nguyen tu 0 den 5 va nhan enter: ";
                 }
                 else
                     break;
@@ -1819,7 +1974,7 @@ private:
                 do
                 {
                     cout << "Tu vung can tra cuu" << endl;
-                    kq = Nhap_TuVung(vocal.TiengAnh, (sizeof(vocal.TiengAnh) / sizeof(char)) - 1);
+                    kq = Nhap_TuVung(vocal.TiengAnh, sizeof(vocal.TiengAnh) / sizeof(char));
                     if (kq == 0)
                     {
                         cout << "Chua nhap tu can tra" << endl;
@@ -1839,6 +1994,7 @@ private:
                             cout << " khong tim thay tu " << vocal.TiengAnh << " trong tu dien !!!" << endl;
                         }
                     }
+                    cout << "--------------" << endl;
                     cout << "Nhan esc de thoat hoac phim bat ky de tiep tuc" << endl;
                     temp = getch();
                     if (temp == 27)
@@ -1851,7 +2007,7 @@ private:
                 do
                 {
                     cout << "Ky tu can tim" << endl;
-                    kq = Nhap_TuVung(vocal.TiengAnh, 1);
+                    kq = Nhap_TuVung(Kytu, sizeof(Kytu)/sizeof(char));
                     if (kq == 0)
                     {
                         cout << "Chua nhap ky tu can tim" << endl;
@@ -1865,7 +2021,7 @@ private:
                     else
                     {
                         cout << "Ket qua:" << endl;
-                        Tree_TN.IN_THEO_CHAR(vocal.TiengAnh[0]);
+                        Tree_TN.IN_THEO_CHAR(Kytu[0]);
                         cout << "=======hoan thanh=======" << endl;
                     }
                     cout << "Nhan esc de thoat hoac phim bat ky de tiep tuc" << endl;
@@ -1880,8 +2036,9 @@ private:
             case '3':
                 do
                 {
+                    cout << "--------------" << endl;
                     cout << "Tu tieng anh" << endl;
-                    kq = Nhap_TuVung(vocal.TiengAnh, (sizeof(vocal.TiengAnh) / sizeof(char)) - 1);
+                    kq = Nhap_TuVung(vocal.TiengAnh, sizeof(vocal.TiengAnh) / sizeof(char));
                     while (kq == 0 || Tree_TN.Timkey(vocal) != NULL)
                     {
                         if (kq == 0)
@@ -1892,15 +2049,18 @@ private:
                         temp = getch();
                         if (temp == 27)
                         {
+                            kq = 0;
                             break;
                         }
+                        cout << "--------------" << endl;
                         cout << "Tu tieng anh" << endl;
-                        kq = Nhap_TuVung(vocal.TiengAnh, (sizeof(vocal.TiengAnh) / sizeof(char)) - 1);
+                        kq = Nhap_TuVung(vocal.TiengAnh, sizeof(vocal.TiengAnh) / sizeof(char));
                     }
                     if (kq == 0)
                         break;
+                    cout << "--------------" << endl;
                     cout << "Nghia tieng viet" << endl;
-                    kq = Nhap_TuVung(vocal.TiengViet, (sizeof(vocal.TiengViet) / sizeof(char)) - 1);
+                    kq = Nhap_TuVung(vocal.TiengViet, sizeof(vocal.TiengViet) / sizeof(char));
                     while (kq == 0)
                     {
                         cout << "Chua nhap nghia tieng viet" << endl;
@@ -1908,15 +2068,18 @@ private:
                         temp = getch();
                         if (temp == 27)
                         {
+                            kq = 0;
                             break;
                         }
+                        cout << "--------------" << endl;
                         cout << "Nghia tieng viet" << endl;
-                        kq = Nhap_TuVung(vocal.TiengViet, (sizeof(vocal.TiengViet) / sizeof(char)) - 1);
+                        kq = Nhap_TuVung(vocal.TiengViet, sizeof(vocal.TiengViet) / sizeof(char));
                     }
                     if (kq == 0)
                         break;
+                    cout << "--------------" << endl;
                     cout << "Tu loai" << endl;
-                    kq = Nhap_TuVung(vocal.Tuloai, (sizeof(vocal.Tuloai) / sizeof(char)) - 1);
+                    kq = Nhap_TuVung(vocal.Tuloai, sizeof(vocal.Tuloai) / sizeof(char));
                     while (kq == 0)
                     {
                         cout << "Chua nhap tu loai" << endl;
@@ -1924,15 +2087,18 @@ private:
                         temp = getch();
                         if (temp == 27)
                         {
+                            kq = 0;
                             break;
                         }
+                        cout << "--------------" << endl;
                         cout << "Tu loai" << endl;
-                        kq = Nhap_TuVung(vocal.Tuloai, (sizeof(vocal.Tuloai) / sizeof(char)) - 1);
+                        kq = Nhap_TuVung(vocal.Tuloai, sizeof(vocal.Tuloai) / sizeof(char));
                     }
                     if (kq == 0)
                         break;
+                    cout << "--------------" << endl;
                     cout << "Vi du" << endl;
-                    kq = Nhap_TuVung(vocal.Vidu, (sizeof(vocal.Vidu) / sizeof(char)) - 1);
+                    kq = Nhap_TuVung(vocal.Vidu, sizeof(vocal.Vidu) / sizeof(char));
                     while (kq == 0)
                     {
                         cout << "Chua nhap vi du" << endl;
@@ -1940,10 +2106,12 @@ private:
                         temp = getch();
                         if (temp == 27)
                         {
+                            kq = 0;
                             break;
                         }
+                        cout << "--------------" << endl;
                         cout << "Vi du" << endl;
-                        kq = Nhap_TuVung(vocal.Vidu, (sizeof(vocal.Vidu) / sizeof(char)) - 1);
+                        kq = Nhap_TuVung(vocal.Vidu, sizeof(vocal.Vidu) / sizeof(char));
                     }
                     if (kq == 0)
                         break;
@@ -1953,6 +2121,7 @@ private:
                     else
                         cout << "Loi them that bai" << endl;
                     //
+                    cout << "==============" << endl;
                     cout << "Nhan esc de thoat hoac phim bat ky de tiep tuc" << endl;
                     temp = getch();
                     if (temp == 27)
@@ -1965,7 +2134,7 @@ private:
                 do
                 {
                     cout << "Tu vung tieng anh can xoa" << endl;
-                    kq = Nhap_TuVung(vocal.TiengAnh, (sizeof(vocal.TiengAnh) / sizeof(char)) - 1);
+                    kq = Nhap_TuVung(vocal.TiengAnh, sizeof(vocal.TiengAnh) / sizeof(char));
                     if (kq == 0)
                     {
                         cout << "Chua nhap tu can xoa" << endl;
@@ -2001,7 +2170,7 @@ private:
                 do
                 {
                     cout << "Nhap tu vung tieng anh can chinh sua" << endl;
-                    kq = Nhap_TuVung(vocal.TiengAnh, (sizeof(vocal.TiengAnh) / sizeof(char)) - 1);
+                    kq = Nhap_TuVung(vocal.TiengAnh, sizeof(vocal.TiengAnh) / sizeof(char));
                     if (kq == 0)
                     {
                         cout << "Chua nhap tu can chinh sua" << endl;
@@ -2029,7 +2198,7 @@ private:
                             if (temp == 27)
                             {
                                 cout << "---Tu tieng anh---" << endl;
-                                kq = Nhap_TuVung(vocal.TiengAnh, (sizeof(vocal.TiengAnh) / sizeof(char)) - 1);
+                                kq = Nhap_TuVung(vocal.TiengAnh, sizeof(vocal.TiengAnh) / sizeof(char));
                                 while (kq == 0)
                                 {
                                     if (kq == 0)
@@ -2043,7 +2212,7 @@ private:
                                         break;
                                     }
                                     cout << "---Tu tieng anh---" << endl;
-                                    kq = Nhap_TuVung(vocal.TiengAnh, (sizeof(vocal.TiengAnh) / sizeof(char)) - 1);
+                                    kq = Nhap_TuVung(vocal.TiengAnh, sizeof(vocal.TiengAnh) / sizeof(char));
                                 }
                                 if (kq == 0)
                                     break;
@@ -2055,7 +2224,7 @@ private:
                             if (temp == 27)
                             {
                                 cout << "---Nghia tieng viet---" << endl;
-                                kq = Nhap_TuVung(vocal.TiengViet, (sizeof(vocal.TiengAnh) / sizeof(char)) - 1);
+                                kq = Nhap_TuVung(vocal.TiengViet, sizeof(vocal.TiengAnh) / sizeof(char));
                                 while (kq == 0)
                                 {
                                     cout << "Chua nhap nghia tieng viet" << endl;
@@ -2066,7 +2235,7 @@ private:
                                         break;
                                     }
                                     cout << "---Nghia tieng viet---" << endl;
-                                    kq = Nhap_TuVung(vocal.TiengViet, (sizeof(vocal.TiengAnh) / sizeof(char)) - 1);
+                                    kq = Nhap_TuVung(vocal.TiengViet, sizeof(vocal.TiengAnh) / sizeof(char));
                                 }
                                 if (kq == 0)
                                     break;
@@ -2078,7 +2247,7 @@ private:
                             if (temp == 27)
                             {
                                 cout << "---Tu loai---" << endl;
-                                kq = Nhap_TuVung(vocal.Tuloai, (sizeof(vocal.TiengAnh) / sizeof(char)) - 1);
+                                kq = Nhap_TuVung(vocal.Tuloai, sizeof(vocal.TiengAnh) / sizeof(char));
                                 while (kq == 0)
                                 {
                                     cout << "Chua nhap tu loai" << endl;
@@ -2089,7 +2258,7 @@ private:
                                         break;
                                     }
                                     cout << "---Tu loai---" << endl;
-                                    kq = Nhap_TuVung(vocal.Tuloai, (sizeof(vocal.TiengAnh) / sizeof(char)) - 1);
+                                    kq = Nhap_TuVung(vocal.Tuloai, sizeof(vocal.TiengAnh) / sizeof(char));
                                 }
                                 if (kq == 0)
                                     break;
@@ -2101,7 +2270,7 @@ private:
                             if (temp == 27)
                             {
                                 cout << "---Vi du---" << endl;
-                                kq = Nhap_TuVung(vocal.Vidu, (sizeof(vocal.TiengAnh) / sizeof(char)) - 1);
+                                kq = Nhap_TuVung(vocal.Vidu, sizeof(vocal.TiengAnh) / sizeof(char));
                                 while (kq == 0)
                                 {
                                     cout << "Chua nhap vi du" << endl;
@@ -2112,7 +2281,7 @@ private:
                                         break;
                                     }
                                     cout << "---Vi du---" << endl;
-                                    kq = Nhap_TuVung(vocal.Vidu, (sizeof(vocal.TiengAnh) / sizeof(char)) - 1);
+                                    kq = Nhap_TuVung(vocal.Vidu, sizeof(vocal.TiengAnh) / sizeof(char));
                                 }
                                 if (kq == 0)
                                     break;
@@ -2149,6 +2318,7 @@ private:
                             cout << "-------Ket qua: Khong tim thay tu-------" << vocal.TiengAnh << " trong cay" << endl;
                         }
                     }
+                    cout << "--------------" << endl;
                     cout << "Nhan esc de thoat hoac phim bat ky de tiep tuc" << endl;
                     temp = getch();
                     if (temp == 27)
@@ -2157,16 +2327,20 @@ private:
                     }
                 } while (1);
                 break;
-            case '6':
-
-                break;
             default:
                 break;
             }
             if (temp == '0')
             {
+                cout << "--------------" << endl;
+                cout << "Nhan esc de luu lai du lieu hoac phim bat ky de tiep tuc thoat" << endl;
+                temp = getch();
+                if (temp == 27)
+                {
+                    Ghifile_txt(Tree_TN.GetRoot());
+                }
                 Tree_TN.DestroyTree();
-                cout << "Da chon 7" << endl;
+                cout << "Da chon 6" << endl;
                 cout << "Thoat ..." << endl;
                 break;
             }
