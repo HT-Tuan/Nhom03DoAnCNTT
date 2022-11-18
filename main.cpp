@@ -986,12 +986,13 @@ private:
                 cout << "Ban vua nhap vao so: " << y << endl;
                 break;
             case '3':
-                while (!(cin >> z))
+                cin >> z;
+                while (Xoa_Vung_Nho_Tam() == 1)
                 {
+                    
                     cout << "Co loi. Vui long chi nhap mot ky tu" << endl;
                     cout << "Nhap lai: ";
-                    cin.clear();
-                    Xoa_Vung_Nho_Tam();
+                    cin >> z;
                 };
                 cout << "Ban vua nhap vao so: " << z << endl;
                 break;
